@@ -31,46 +31,67 @@ The initial dataset used in this project is:
 
 This dataset contains EEG recordings of pediatric subjects with epilepsy and annotated seizure intervals.
 
-## Project Structure
+## Dataset setup
 
-```
-neuro-eeg-cdss
-│
-├─ configs
-├─ data
-│ ├─ raw
-│ └─ processed
-│
-├─ experiments
-├─ notebooks
-├─ tests
-│
-├─ src
-│ ├─ data
-│ ├─ preprocessing
-│ ├─ features
-│ ├─ models
-│ ├─ training
-│ ├─ evaluation
-│ ├─ calibration
-│ ├─ uncertainty
-│ ├─ explainability
-│ ├─ inference
-│ └─ api
-│
-└─ pyproject.toml
+Download the dataset:
+```bash
+python scripts/download/download_chbmit_bids.py
 ```
 
-## Development Environment
+Validate the BIDS structure:
+```bash
+python scripts/data_checks/check_bids_structure.py
+```
 
-The project uses:
+Read one EEG recording:
+```bash
+python scripts/data_checks/read_one_recording.py
+```
 
-- **Python 3.11**
-- **Docker Dev Containers**
-- **PyTorch**
-- **MNE / MNE-BIDS**
-- **FastAPI**
+Inspect annotations:
+```bash
+python scripts/data_checks/inspect_annotations.py
+```
 
-## Status
+Build the dataset manifest:
+```bash
+python scripts/data_index/build_manifest.py
+```
 
-Sprint 0A – Project infrastructure setup
+
+## Project Status
+
+### Completed
+
+#### Sprint 0A — Environment & Setup
+- Dev container configured
+- Dependencies installed
+- Project structure initialized
+
+#### Sprint 0B — Data Ingestion
+- CHB-MIT BIDS dataset downloaded
+- BIDS structure validated
+- EEG recordings successfully loaded with mne-bids
+- Annotations inspected
+
+#### Sprint 0C — Data Indexing
+- Dataset indexed into `manifest.parquet`
+- Reproducible data pipeline established
+
+---
+
+### In Progress
+
+#### Sprint 1 — Dataset Preparation
+- Label extraction (seizure vs non-seizure)
+- Segmenting EEG into training windows
+- Building ML-ready dataset
+
+---
+
+### Next Steps
+
+- Feature extraction
+- Model training (baseline)
+- Evaluation pipeline
+- Explainability module
