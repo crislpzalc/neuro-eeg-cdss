@@ -1,0 +1,90 @@
+{
+  "metadata": {
+    "input_path": "data/processed/segments.parquet",
+    "n_rows_dataset": 707524,
+    "columns": [
+      "subject",
+      "session",
+      "run",
+      "path",
+      "recording_duration_sec",
+      "start_sec",
+      "end_sec",
+      "window_size_sec",
+      "stride_sec",
+      "overlap_ratio",
+      "label"
+    ],
+    "recording_column_used": "run"
+  },
+  "global_summary": {
+    "total_segments": 707524,
+    "total_positive": 2321,
+    "total_negative": 705203,
+    "global_positive_ratio": 0.003280454090603287,
+    "total_subjects": 23,
+    "subjects_with_positive": 23,
+    "subjects_without_positive": 0,
+    "subject_positive_ratio": 1.0
+  },
+  "distribution_stats": {
+    "n_segments_per_subject": {
+      "min": 13674.0,
+      "p25": 18914.5,
+      "median": 25046.0,
+      "mean": 30761.91304347826,
+      "p75": 32399.5,
+      "max": 112356.0,
+      "std": 20905.100043255607
+    },
+    "n_positive_per_subject": {
+      "min": 18.0,
+      "p25": 50.5,
+      "median": 76.0,
+      "mean": 100.91304347826087,
+      "p75": 109.5,
+      "max": 399.0,
+      "std": 87.02069371256185
+    },
+    "n_negative_per_subject": {
+      "min": 13656.0,
+      "p25": 18855.5,
+      "median": 24886.0,
+      "mean": 30661.0,
+      "p75": 32156.0,
+      "max": 112280.0,
+      "std": 20913.599372074914
+    },
+    "positive_ratio_per_subject": {
+      "min": 0.0006452955870108243,
+      "p25": 0.0015976856982555666,
+      "median": 0.0024949321690316546,
+      "mean": 0.004312786564982621,
+      "p75": 0.00445004859861046,
+      "max": 0.01726669407411758,
+      "std": 0.004337512745050645
+    }
+  },
+  "concentration": {
+    "top_1_positive_share": 0.17190866006031882,
+    "top_3_positive_share": 0.37699267557087457,
+    "top_5_positive_share": 0.5015079707022835,
+    "top_1_segment_share": 0.15880168022568847,
+    "top_3_segment_share": 0.3025254266993063,
+    "top_5_segment_share": 0.43865225773259986
+  },
+  "risk_flags": {
+    "few_total_subjects": false,
+    "very_few_total_subjects": false,
+    "few_positive_subjects": false,
+    "very_few_positive_subjects": false,
+    "many_subjects_without_positive": false,
+    "positives_highly_concentrated_top1": false,
+    "positives_highly_concentrated_top3": false,
+    "segments_highly_concentrated_top1": false,
+    "segments_highly_concentrated_top3": false,
+    "has_many_very_small_subjects": false,
+    "has_zero_positive_subjects": false,
+    "recommended_strategy": "The dataset seems compatible with a reproducible subject-level hold-out split. Still, explicitly verify that validation and test contain enough positive subjects."
+  }
+}
