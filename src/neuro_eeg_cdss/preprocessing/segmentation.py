@@ -1,23 +1,45 @@
+"""
+Utilities for segmenting EEG recordings into fixed-length time windows and
+computing temporal overlap with annotated intervals.
+
+This module provides the temporal backbone for downstream dataset generation.
+It defines deterministic window generation and overlap computation rules that
+are later used for seizure labeling.
+
+Design goals
+------------
+- Produce reproducible fixed-length windows from continuous recordings
+- Make overlap calculations explicit and auditable
+- Enforce basic temporal consistency through early validation
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 
 class SegmentationError(ValueError):
-    """Error lanzado cuando la configuración o los tiempos de segmentación no son válidos."""
+    """Raised when segmentation parameters or temporal boundaries are invalid."""
 
 
 @dataclass(frozen=True)
 class TimeWindow:
     """
-    Ventana temporal fija dentro de un registro EEG.
+    Fixed temporal window within an EEG recording.
 
     Attributes
     ----------
     start_sec : float
-        Tiempo de inicio de la ventana en segundos.
+        Window start time in seconds.
     end_sec : float
-        Tiempo de fin de la ventana en segundos.
+        Window end time in seconds.
+
+    Notes
+    -----
+    This object represents a half-open temporal span in recording-relative
+    time, intended for deterministic segmentation of continuous EEG signals.
+    Downstream code assumes that all times are expressed in seconds from the
+    start of the recording.
     """
 
     start_sec: float
@@ -25,24 +47,24 @@ class TimeWindow:
 
     @property
     def duration_sec(self) -> float:
-        """Duración de la ventana en segundos."""
+        """Window duration in seconds."""
         return self.end_sec - self.start_sec
 
 
 def _validate_positive(value: float, name: str) -> None:
     """
-    Valida que un valor numérico sea estrictamente positivo.
+    Validate that a numeric value is strictly positive.
     """
     if value <= 0:
-        raise SegmentationError(f"'{name}' debe ser > 0. Valor recibido: {value}")
+        raise SegmentationError(f"'{name}' must be > 0. Received value: {value}")
 
 
 def _validate_non_negative(value: float, name: str) -> None:
     """
-    Valida que un valor numérico sea no negativo.
+    Validate that a numeric value is non-negative.
     """
     if value < 0:
-        raise SegmentationError(f"'{name}' debe ser >= 0. Valor recibido: {value}")
+        raise SegmentationError(f"'{name}' must be >= 0. Received value: {value}")
 
 
 def generate_time_windows(
@@ -51,30 +73,37 @@ def generate_time_windows(
     stride_sec: float,
 ) -> list[TimeWindow]:
     """
-    Genera ventanas temporales completas dentro de un registro EEG.
+    Generate complete fixed-length time windows within an EEG recording.
 
-    Regla:
-    - Solo se generan ventanas completas.
-    - Una ventana se incluye solo si end_sec <= recording_duration_sec.
+    Rule
+    ----
+    - Only complete windows are generated.
+    - A window is included only if ``end_sec <= recording_duration_sec``.
 
     Parameters
     ----------
     recording_duration_sec : float
-        Duración total del registro en segundos.
+        Total recording duration in seconds.
     window_size_sec : float
-        Tamaño de cada ventana en segundos.
+        Length of each window in seconds.
     stride_sec : float
-        Desplazamiento entre ventanas consecutivas en segundos.
+        Step between consecutive windows in seconds.
 
     Returns
     -------
     list[TimeWindow]
-        Lista ordenada de ventanas temporales.
+        Sorted list of temporal windows.
 
     Raises
     ------
     SegmentationError
-        Si los parámetros son inválidos.
+        If the input parameters are invalid.
+
+    Notes
+    -----
+    This function intentionally discards trailing incomplete segments. This
+    keeps the window geometry uniform across the dataset and simplifies feature
+    extraction and model input construction.
     """
     _validate_non_negative(recording_duration_sec, "recording_duration_sec")
     _validate_positive(window_size_sec, "window_size_sec")
@@ -86,6 +115,8 @@ def generate_time_windows(
     windows: list[TimeWindow] = []
     start_sec = 0.0
 
+    # Windows are generated sequentially from the start of the recording to
+    # guarantee deterministic coverage under a fixed window/stride policy.
     while start_sec + window_size_sec <= recording_duration_sec:
         end_sec = start_sec + window_size_sec
         windows.append(TimeWindow(start_sec=start_sec, end_sec=end_sec))
@@ -101,34 +132,40 @@ def compute_overlap_seconds(
     interval_end_sec: float,
 ) -> float:
     """
-    Calcula el solape temporal en segundos entre una ventana y un intervalo.
+    Compute the temporal overlap in seconds between a window and an interval.
 
     Parameters
     ----------
     window_start_sec : float
-        Inicio de la ventana.
+        Window start time.
     window_end_sec : float
-        Fin de la ventana.
+        Window end time.
     interval_start_sec : float
-        Inicio del intervalo.
+        Interval start time.
     interval_end_sec : float
-        Fin del intervalo.
+        Interval end time.
 
     Returns
     -------
     float
-        Segundos de solape. Si no hay solape, devuelve 0.0.
+        Overlap duration in seconds. Returns 0.0 if there is no overlap.
 
     Raises
     ------
     SegmentationError
-        Si los tiempos son inválidos.
+        If the temporal boundaries are invalid.
+
+    Notes
+    -----
+    The overlap is computed geometrically from interval intersections and does
+    not assume any specific semantic meaning of the interval beyond its start
+    and end boundaries.
     """
     if window_end_sec < window_start_sec:
-        raise SegmentationError("La ventana tiene tiempos inválidos: end_sec < start_sec.")
+        raise SegmentationError("Invalid window boundaries: end_sec < start_sec.")
 
     if interval_end_sec < interval_start_sec:
-        raise SegmentationError("El intervalo tiene tiempos inválidos: end_sec < start_sec.")
+        raise SegmentationError("Invalid interval boundaries: end_sec < start_sec.")
 
     overlap_start = max(window_start_sec, interval_start_sec)
     overlap_end = min(window_end_sec, interval_end_sec)
@@ -141,19 +178,26 @@ def compute_total_overlap_seconds(
     intervals: list[tuple[float, float]],
 ) -> float:
     """
-    Calcula el solape total en segundos entre una ventana y una lista de intervalos.
+    Compute the total overlap in seconds between a window and multiple intervals.
 
     Parameters
     ----------
     window : TimeWindow
-        Ventana temporal.
+        Temporal window.
     intervals : list[tuple[float, float]]
-        Lista de intervalos (start_sec, end_sec).
+        List of intervals as ``(start_sec, end_sec)``.
 
     Returns
     -------
     float
-        Solape total en segundos.
+        Total overlap duration in seconds.
+
+    Notes
+    -----
+    This function assumes that the provided intervals are already semantically
+    meaningful for aggregation. If intervals overlap each other, the total may
+    exceed the window duration due to double counting and should be validated
+    upstream if that behavior is undesired.
     """
     total_overlap = 0.0
 
@@ -173,28 +217,34 @@ def compute_overlap_ratio(
     overlap_seconds: float,
 ) -> float:
     """
-    Calcula la fracción de solape de una ventana.
+    Compute the overlap fraction for a time window.
 
     Parameters
     ----------
     window : TimeWindow
-        Ventana temporal.
+        Temporal window.
     overlap_seconds : float
-        Solape total en segundos.
+        Total overlap in seconds.
 
     Returns
     -------
     float
-        Ratio de solape en [0, 1].
+        Overlap ratio in the interval [0, 1].
 
     Raises
     ------
     SegmentationError
-        Si el solape es inválido.
+        If the overlap value is invalid.
+
+    Notes
+    -----
+    This normalization step converts an absolute overlap duration into a
+    scale-independent quantity that can be used directly by downstream labeling
+    policies.
     """
     _validate_non_negative(overlap_seconds, "overlap_seconds")
 
     if overlap_seconds > window.duration_sec:
-        raise SegmentationError("El solape no puede ser mayor que la duración de la ventana.")
+        raise SegmentationError("Overlap cannot be greater than the window duration.")
 
     return overlap_seconds / window.duration_sec

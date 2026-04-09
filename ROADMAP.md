@@ -106,10 +106,9 @@ Transformar registros EEG crudos en segmentos etiquetados.
 
 ---
 
-[AQUÍ ESTAMOS]
 ## Sprint 1B — Feature Engineering (baseline clásico)
 
-**Estado:** siguiente
+**Estado:** hecho
 
 ### Objetivo
 
@@ -166,6 +165,7 @@ Esta fase conecta la señal cruda con ML interpretable y defendible.
 
 ---
 
+[AQUÍ ESTAMOS]
 ## Sprint 1C — Patient-Independent Split
 
 ### Objetivo

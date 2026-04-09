@@ -1,28 +1,48 @@
+"""
+Utilities for assigning segment-level labels based on seizure overlap.
+
+This module implements a deterministic labeling policy that converts the
+fraction of seizure overlap within a fixed-length window into a binary label
+or a discard decision.
+
+Design goals
+------------
+- Make labeling rules explicit and reproducible
+- Prevent ambiguous window assignments from silently entering the dataset
+- Keep the policy simple enough to support baseline modeling and ablation
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 
 class LabelingError(ValueError):
-    """Error lanzado cuando la configuración o el solape no son válidos."""
+    """Raised when labeling parameters or overlap values are invalid."""
 
 
 @dataclass(frozen=True)
 class LabelingDecision:
     """
-    Resultado del etiquetado de una ventana.
+    Result of labeling a single window.
 
     Attributes
     ----------
     label : int | None
-        Etiqueta asignada:
-        - 1 para seizure
-        - 0 para non-seizure
-        - None si la ventana debe descartarse
+        Assigned label:
+        - 1 for seizure
+        - 0 for non-seizure
+        - None if the window should be discarded
     keep : bool
-        Indica si la ventana se conserva en el dataset final.
+        Whether the window is retained in the final dataset.
     reason : str
-        Motivo de la decisión tomada.
+        Reason describing the labeling decision.
+
+    Notes
+    -----
+    This object separates the semantic label from the dataset retention
+    decision. This makes the labeling policy explicit and easier to audit in
+    downstream dataset construction.
     """
 
     label: int | None
@@ -32,11 +52,11 @@ class LabelingDecision:
 
 def _validate_overlap_ratio(overlap_ratio: float) -> None:
     """
-    Valida que el overlap_ratio esté en el rango [0, 1].
+    Validate that overlap_ratio lies within the closed interval [0, 1].
     """
     if overlap_ratio < 0.0 or overlap_ratio > 1.0:
         raise LabelingError(
-            f"'overlap_ratio' debe estar entre 0 y 1. Valor recibido: {overlap_ratio}"
+            f"'overlap_ratio' must be between 0 and 1. Received value: {overlap_ratio}"
         )
 
 
@@ -46,33 +66,42 @@ def assign_label(
     drop_partial_overlap: bool = True,
 ) -> LabelingDecision:
     """
-    Asigna una etiqueta a una ventana a partir de su ratio de solape con crisis.
+    Assign a label to a window based on its seizure overlap ratio.
 
     Parameters
     ----------
     overlap_ratio : float
-        Fracción de la ventana que solapa con crisis.
+        Fraction of the window that overlaps with seizure activity.
     positive_overlap_threshold : float, default=0.5
-        Umbral a partir del cual una ventana se considera positiva.
+        Threshold above which a window is considered positive.
     drop_partial_overlap : bool, default=True
-        Si es True, las ventanas con solape parcial pero menor al umbral se descartan.
-        Si es False, esas ventanas se asignan como negativas.
+        If True, windows with partial overlap below the threshold are dropped.
+        If False, those windows are assigned as negative.
 
     Returns
     -------
     LabelingDecision
-        Decisión de etiquetado.
+        Labeling decision for the window.
 
     Raises
     ------
     LabelingError
-        Si los parámetros son inválidos.
+        If the input parameters are invalid.
+
+    Notes
+    -----
+    The labeling rule implemented here is intentionally simple and designed for
+    fixed-window baseline experiments. More refined policies, such as
+    multi-class labels or pre-ictal handling, can be introduced in later
+    stages without changing the basic interface.
     """
     _validate_overlap_ratio(overlap_ratio)
 
     if positive_overlap_threshold <= 0.0 or positive_overlap_threshold > 1.0:
-        raise LabelingError("'positive_overlap_threshold' debe estar en el rango (0, 1].")
+        raise LabelingError("'positive_overlap_threshold' must lie in the interval (0, 1].")
 
+    # Windows whose seizure overlap meets or exceeds the configured threshold
+    # are treated as positive examples.
     if overlap_ratio >= positive_overlap_threshold:
         return LabelingDecision(
             label=1,
@@ -80,6 +109,7 @@ def assign_label(
             reason="positive_overlap_threshold_reached",
         )
 
+    # Windows with no seizure overlap are unambiguously negative.
     if overlap_ratio == 0.0:
         return LabelingDecision(
             label=0,
@@ -87,6 +117,8 @@ def assign_label(
             reason="no_overlap",
         )
 
+    # Partial-overlap windows below the positive threshold are the main source
+    # of ambiguity in binary fixed-window labeling.
     if drop_partial_overlap:
         return LabelingDecision(
             label=None,
@@ -94,6 +126,8 @@ def assign_label(
             reason="partial_overlap_dropped",
         )
 
+    # If ambiguous windows are not discarded, they are explicitly assigned to
+    # the negative class according to the configured policy.
     return LabelingDecision(
         label=0,
         keep=True,
