@@ -13,8 +13,8 @@ data/raw/
 data/processed/
 data/manifests/
 
-# Experiments
-experiments/
+# Experiment artifacts (results, not source code)
+/experiments/
 
 # OS
 .DS_Store
