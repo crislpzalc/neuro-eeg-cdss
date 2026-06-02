@@ -1,0 +1,68 @@
+{
+  "total_subjects": 23,
+  "total_segments": 707524,
+  "total_positive": 2321,
+  "config": {
+    "train_ratio": 0.6,
+    "val_ratio": 0.2,
+    "test_ratio": 0.2
+  },
+  "splits": {
+    "train": {
+      "n_subjects": 16,
+      "n_segments": 531300,
+      "n_positive": 1378,
+      "n_negative": 529922,
+      "positive_ratio": 0.002594,
+      "positive_share": 0.5937,
+      "segment_share": 0.7509,
+      "subjects": [
+        "sub-01",
+        "sub-04",
+        "sub-05",
+        "sub-06",
+        "sub-07",
+        "sub-08",
+        "sub-10",
+        "sub-11",
+        "sub-13",
+        "sub-14",
+        "sub-18",
+        "sub-19",
+        "sub-20",
+        "sub-22",
+        "sub-23",
+        "sub-24"
+      ]
+    },
+    "val": {
+      "n_subjects": 3,
+      "n_segments": 91327,
+      "n_positive": 472,
+      "n_negative": 90855,
+      "positive_ratio": 0.005168,
+      "positive_share": 0.2034,
+      "segment_share": 0.1291,
+      "subjects": [
+        "sub-09",
+        "sub-15",
+        "sub-16"
+      ]
+    },
+    "test": {
+      "n_subjects": 4,
+      "n_segments": 84897,
+      "n_positive": 471,
+      "n_negative": 84426,
+      "positive_ratio": 0.005548,
+      "positive_share": 0.2029,
+      "segment_share": 0.12,
+      "subjects": [
+        "sub-02",
+        "sub-03",
+        "sub-12",
+        "sub-17"
+      ]
+    }
+  }
+}

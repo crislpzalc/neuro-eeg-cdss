@@ -78,20 +78,26 @@ python scripts/data_index/build_manifest.py
 - Dataset indexed into `manifest.parquet`
 - Reproducible data pipeline established
 
----
-
-### In Progress
-
-#### Sprint 1 — Dataset Preparation
+#### Sprint 1A — Dataset Preparation
 - Label extraction (seizure vs non-seizure)
-- Segmenting EEG into training windows
-- Building ML-ready dataset
+- Segmenting EEG into 5-second training windows
+- Building ML-ready dataset (`segments.parquet`)
+
+#### Sprint 1B — Feature Engineering
+- Time-domain features (mean, std, RMS, line length)
+- Frequency-domain features (delta, theta, alpha, beta bandpower)
+- 144 features per segment (8 features × 18 channels)
+
+#### Sprint 1C — Patient-Independent Split
+- Stratified subject-level train/val/test split (60/20/20)
+- Zero patient overlap between splits
+- Balanced positive segment distribution across splits
 
 ---
 
 ### Next Steps
 
-- Feature extraction
-- Model training (baseline)
-- Evaluation pipeline
-- Explainability module
+- Baseline model training (Logistic Regression, Random Forest)
+- Clinical evaluation metrics (recall, specificity, F1, AUROC)
+- Labeling threshold experiments
+- Deep learning models

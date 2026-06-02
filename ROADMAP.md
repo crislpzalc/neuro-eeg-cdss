@@ -165,8 +165,9 @@ Esta fase conecta la señal cruda con ML interpretable y defendible.
 
 ---
 
-[AQUÍ ESTAMOS]
 ## Sprint 1C — Patient-Independent Split
+
+**Estado:** hecho
 
 ### Objetivo
 
@@ -174,34 +175,15 @@ Crear una estrategia de entrenamiento y evaluación sin leakage por paciente.
 
 ### Entregables
 
-* Split train/val/test por sujeto
-* Config reproducible de splits
-
-### Tareas
-
-1. Definir estrategia:
-
-   * train / validation / test
-   * o cross-validation por sujeto
-2. Implementar módulo `splits.py`
-3. Garantizar que no hay mezcla de pacientes
-4. Guardar archivos de split:
-
-   * `train_subjects.json`
-   * `val_subjects.json`
-   * `test_subjects.json`
-5. Añadir tests
-
-### Validaciones
-
-* Intersección de sujetos vacía
-* Distribución de positivos razonable por split
+* `splits.py`
+* Split train/val/test por sujeto (60/20/20)
+* JSON files reproducibles
+* tests (15 tests)
+* Script de creación de splits
 
 ### Documentación
 
 * `docs/00_sprints/sprint_1C.md`
-* actualizar `docs/30_modeling.md`
-* actualizar `docs/50_decisions.md`
 
 ### Contribución al paper
 
@@ -209,6 +191,7 @@ Esto es crucial para credibilidad metodológica.
 
 ---
 
+[AQUÍ ESTAMOS]
 ## Sprint 1D — Baseline Models
 
 ### Objetivo
