@@ -93,11 +93,16 @@ python scripts/data_index/build_manifest.py
 - Zero patient overlap between splits
 - Balanced positive segment distribution across splits
 
+#### Sprint 1D — Baseline Models
+- Logistic Regression and Random Forest with balanced class weights
+- Generic training pipeline (`trainer.py`) with seed control and artifact serialization
+- Predictions saved per split for decoupled evaluation
+- Patient-independent results: LR test recall ~23%, RF test recall ~0% (establishes performance floor)
+
 ---
 
 ### Next Steps
 
-- Baseline model training (Logistic Regression, Random Forest)
-- Clinical evaluation metrics (recall, specificity, F1, AUROC)
+- Clinical evaluation metrics (sensitivity, specificity, F1, AUROC, confusion matrices)
 - Labeling threshold experiments
 - Deep learning models

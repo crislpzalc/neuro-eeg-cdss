@@ -12,6 +12,7 @@ dependencies = [
     "numpy",
     "scipy",
     "pandas",
+    "pyarrow",
     "matplotlib",
     "scikit-learn",
     "mne",

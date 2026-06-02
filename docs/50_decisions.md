@@ -55,3 +55,27 @@ This document tracks important methodological and architectural decisions made d
 **When to revisit:** If moving to deep learning with batch-based training (Sprint 3), monitor whether the volume imbalance causes epoch-level training instability.
 
 ---
+
+## D5. Prediction decoupling: save raw outputs per split
+
+**Sprint:** 1D
+
+**Decision:** Training saves raw predictions (y_true, y_pred, y_proba) as parquet files for each split, rather than computing metrics inline.
+
+**Rationale:** Decouples training from evaluation. Sprint 1E (and any future analysis) can compute arbitrary metrics, generate plots, and try different thresholds without re-running training. This is especially important given that training on 531K samples takes significant time.
+
+**Trade-off:** Requires additional disk space for prediction files. Trivial compared to model artifacts.
+
+---
+
+## D6. Baseline overfitting signals future modeling direction
+
+**Sprint:** 1D
+
+**Decision:** Random Forest achieves 100% train recall but 0% test recall. Rather than tuning RF hyperparameters, this is documented as a finding and the project proceeds to clinical evaluation (Sprint 1E) and eventually to deep learning (Block 3).
+
+**Rationale:** The severe overfitting indicates that the RF memorizes patient-specific seizure signatures rather than learning generalizable features. This is a fundamental limitation of the 144 handcrafted features combined with decision trees, not a hyperparameter problem. The correct response is to move toward models that can learn richer representations (CNNs on raw signal), not to spend time tuning a model architecture that has reached its ceiling.
+
+**When to revisit:** Sprint 3E (Comparative Study) will provide the definitive comparison. If RF with regularization (max_depth, feature selection) significantly improves, it may be worth exploring further.
+
+---

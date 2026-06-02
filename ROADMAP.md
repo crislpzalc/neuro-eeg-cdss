@@ -191,8 +191,9 @@ Esto es crucial para credibilidad metodológica.
 
 ---
 
-[AQUÍ ESTAMOS]
 ## Sprint 1D — Baseline Models
+
+**Estado:** hecho
 
 ### Objetivo
 
@@ -200,43 +201,25 @@ Entrenar un baseline simple pero correcto.
 
 ### Entregables
 
-* Logistic Regression
-* Random Forest
-* scripts reproducibles de entrenamiento
-
-### Tareas
-
-1. Preparar matrices X, y
-2. Implementar pipeline de entrenamiento
-3. Entrenar:
-
-   * Logistic Regression con `class_weight="balanced"`
-   * RandomForest con `class_weight="balanced"`
-4. Guardar:
-
-   * modelos
-   * configs
-   * resultados iniciales
-5. Añadir control de seeds
-6. Registrar hyperparameters
-
-### Validaciones
-
-* Entrenamiento estable
-* Sin errores por desbalanceo
-* Guardado correcto de artefactos
+* Logistic Regression con `class_weight="balanced"`
+* Random Forest con `class_weight="balanced"`
+* `trainer.py` — pipeline genérico de entrenamiento
+* Scripts reproducibles de entrenamiento
+* Predicciones guardadas por split (train/val/test)
+* 14 tests
 
 ### Documentación
 
 * `docs/00_sprints/sprint_1D.md`
-* actualizar `docs/30_modeling.md`
+* `docs/30_modeling.md`
 
 ### Contribución al sistema final
 
-Te da un primer detector serio y defendible.
+Primer detector serio y defendible. Establece el suelo de rendimiento para todos los modelos futuros.
 
 ---
 
+[AQUÍ ESTAMOS]
 ## Sprint 1E — Clinical Evaluation (window-level)
 
 ### Objetivo
