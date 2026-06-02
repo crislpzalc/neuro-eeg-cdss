@@ -167,7 +167,28 @@ data/splits/
 
 ### 7.1 Positive-count balancing over subject-count balancing
 
-The algorithm targets proportional distribution of positive segments rather than equal distribution of subjects. This is because subjects contribute very different amounts of seizure data.
+The algorithm targets proportional distribution of **positive segments** rather than equal distribution of subjects or total segments. This is a deliberate choice because subjects contribute very different amounts of seizure data.
+
+**Observed effect on the CHB-MIT dataset:**
+
+| Split | Subject share | Segment share | Positive share (target) |
+|-------|--------------|---------------|------------------------|
+| Train | 69.6% | 75.1% | 59.4% (60%) |
+| Val | 13.0% | 12.9% | 20.3% (20%) |
+| Test | 17.4% | 12.0% | 20.3% (20%) |
+
+The training set concentrates 75.1% of total segments despite targeting only 60% of positives. This occurs because subjects like sub-04 contribute a large volume of recordings (112,356 segments) but very few seizures (76 positives). Once the algorithm assigns them to train for positive-balancing reasons, their total volume comes along.
+
+**Why this is acceptable:**
+
+* For classical ML models operating on tabular features, the volume imbalance in negatives has minimal impact because class weighting (`class_weight="balanced"`) adjusts the loss function independently of split sizes.
+* The alternative — balancing by subject count or total volume — would risk concentrating most positive examples in a single split, which is far more damaging to evaluation validity.
+* The critical quantity for evaluation quality is the number of positive examples in val/test, not the total number of negatives.
+
+**When this could become problematic:**
+
+* In deep learning settings with batch-based training, a much larger training set could cause epoch-level imbalance issues. This should be monitored in Sprint 3.
+* If a future dataset had subjects with extreme volume asymmetry *and* extreme positive asymmetry in opposite directions, the algorithm could produce degenerate splits. Adding subject-count guardrails would be the appropriate mitigation.
 
 ### 7.2 Deterministic over random
 
