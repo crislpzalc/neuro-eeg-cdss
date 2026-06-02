@@ -1,5 +1,11 @@
 # Sprint 1A — Dataset Preparation (EEG Seizure Detection)
 
+## Status
+
+Completed
+
+---
+
 ## 1. Objective
 
 The goal of this sprint is to transform raw EEG recordings from the CHB-MIT dataset (BIDS format) into a structured and labeled dataset suitable for machine learning.

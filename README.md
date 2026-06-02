@@ -99,10 +99,16 @@ python scripts/data_index/build_manifest.py
 - Predictions saved per split for decoupled evaluation
 - Patient-independent results: LR test recall ~23%, RF test recall ~0% (establishes performance floor)
 
+#### Sprint 1E — Clinical Evaluation
+- 19 clinical metrics including sensitivity, specificity, F2, AUROC, AUPRC
+- Publication-quality plots: ROC curves, PR curves, confusion matrices, threshold analysis
+- Model comparison: RF discriminates better (AUROC 0.77 vs 0.71) but both insufficient for clinical use
+- Reusable evaluation framework for all future models
+
 ---
 
 ### Next Steps
 
-- Clinical evaluation metrics (sensitivity, specificity, F1, AUROC, confusion matrices)
-- Labeling threshold experiments
-- Deep learning models
+- Labeling threshold experiments (impact of labeling strategy on detection)
+- Temporal post-processing (smoothing, majority voting)
+- Deep learning models (CNN, LSTM, Transformer)

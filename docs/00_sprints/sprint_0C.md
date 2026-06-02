@@ -1,5 +1,11 @@
 # Sprint 0C — Dataset Indexing
 
+## Status
+
+Completed
+
+---
+
 ## 1. Objective
 
 The goal of this sprint is to transform the raw dataset into an indexed structure that enables efficient and scalable access.

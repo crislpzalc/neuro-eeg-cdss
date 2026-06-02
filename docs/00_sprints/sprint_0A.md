@@ -1,5 +1,11 @@
 # Sprint 0A — Environment & Project Setup
 
+## Status
+
+Completed
+
+---
+
 ## 1. Objective
 
 The goal of this sprint is to establish a robust, reproducible, and scalable development environment for the project.

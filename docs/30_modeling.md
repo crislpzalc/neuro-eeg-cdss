@@ -54,7 +54,7 @@ All randomness is controlled through a single seed (default: 42):
 
 Raw predictions (y_true, y_pred, y_proba) are saved as parquet files per split. This decouples training from evaluation: subsequent sprints can compute any metric without re-running training.
 
-### 1.6 Baseline Results
+### 1.6 Baseline Results — Preliminary (Sprint 1D)
 
 | Model | Split | Accuracy | Recall | Precision |
 |-------|-------|----------|--------|-----------|
@@ -65,12 +65,30 @@ Raw predictions (y_true, y_pred, y_proba) are saved as parquet files per split. 
 | Random Forest | Val | 0.9951 | 0.0826 | 0.7358 |
 | Random Forest | Test | 0.9943 | 0.0000 | 0.0000 |
 
+### 1.7 Clinical Evaluation — Full Metrics (Sprint 1E)
+
+**Test set performance:**
+
+| Metric | Logistic Regression | Random Forest |
+|--------|:-------------------:|:-------------:|
+| Sensitivity | 0.2335 | 0.0000 |
+| Specificity | 0.9281 | 0.9998 |
+| Precision | 0.0178 | 0.0000 |
+| NPV | 0.9954 | 0.9945 |
+| F1 | 0.0331 | 0.0000 |
+| F2 | 0.0682 | 0.0000 |
+| Balanced Accuracy | 0.5808 | 0.4999 |
+| **AUROC** | **0.6622** | **0.7104** |
+| **AUPRC** | **0.0123** | **0.0572** |
+
 **Key findings:**
 
 * **LR generalizes poorly but learns something.** Train recall 84.5% drops to test 23.1%, indicating the linear boundary doesn't transfer across patients.
 * **RF overfits severely.** Perfect train performance collapses to 0% test recall. The trees memorize patient-specific seizure signatures rather than generalizable patterns.
-* **These results validate the evaluation protocol.** The train-test gap confirms that patient-independent splitting prevents inflated metrics.
-* **Performance floor established.** Any future model must exceed ~23% test recall to demonstrate progress.
+* **RF discriminates better than LR.** Despite 0% recall at threshold 0.5, RF has higher AUROC (0.71 vs 0.66) and AUPRC (0.057 vs 0.012). The model ranks seizures above non-seizures but its probabilities are uncalibrated.
+* **Both models beat random.** Random AUROC = 0.5, random AUPRC ≈ 0.006. Both models significantly exceed these baselines.
+* **AUPRC is the honest metric.** Both values are very low, reflecting the fundamental challenge of achieving useful precision with 0.55% prevalence.
+* **Performance floor established.** Future models must exceed AUROC > 0.71 and AUPRC > 0.057 to demonstrate progress.
 
 ### 1.7 Artifact Structure
 

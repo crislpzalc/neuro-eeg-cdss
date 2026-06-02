@@ -79,3 +79,15 @@ This document tracks important methodological and architectural decisions made d
 **When to revisit:** Sprint 3E (Comparative Study) will provide the definitive comparison. If RF with regularization (max_depth, feature selection) significantly improves, it may be worth exploring further.
 
 ---
+
+## D7. F2 over F1 as primary classification metric
+
+**Sprint:** 1E
+
+**Decision:** F2 score (beta=2) is prioritized over F1 for evaluating seizure detection models. AUPRC is prioritized over AUROC as the threshold-independent metric.
+
+**Rationale:** In seizure detection, a false negative (missed seizure) is far more dangerous than a false positive (false alarm). F2 with beta=2 weights sensitivity 4x more than precision, reflecting this clinical asymmetry. Similarly, AUPRC is more informative than AUROC for imbalanced datasets because it is sensitive to performance on the minority class.
+
+**Trade-off:** F2 can appear to reward models that generate many false alarms. In a real system, false alarm rate must still be controlled — but through post-processing (Sprint 2A) and event-level evaluation (Sprint 2B), not by penalizing the detection model.
+
+---

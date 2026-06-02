@@ -219,8 +219,9 @@ Primer detector serio y defendible. Establece el suelo de rendimiento para todos
 
 ---
 
-[AQUÍ ESTAMOS]
 ## Sprint 1E — Clinical Evaluation (window-level)
+
+**Estado:** hecho
 
 ### Objetivo
 
@@ -228,38 +229,24 @@ Evaluar los modelos con métricas relevantes clínicamente.
 
 ### Entregables
 
-* métricas por modelo
-* tablas y gráficos
-
-### Tareas
-
-1. Implementar métricas:
-
-   * recall / sensitivity
-   * specificity
-   * F1
-   * AUROC
-   * confusion matrix
-2. Evaluar por split
-3. Analizar falsos positivos y falsos negativos
-4. Generar reportes básicos
-
-### Validaciones
-
-* Resultados coherentes con dataset muy desbalanceado
-* Interpretación clínica inicial
+* `metrics.py` — 19 métricas clínicas (sensitivity, specificity, F2, AUROC, AUPRC, etc.)
+* `plots.py` — visualización publication-quality (ROC, PR, confusion matrices, threshold analysis)
+* Script de evaluación que consume predicciones guardadas (sin re-entrenar)
+* Análisis de threshold (sensitivity-specificity trade-off)
+* 31 tests (23 metrics + 8 plots)
 
 ### Documentación
 
 * `docs/00_sprints/sprint_1E.md`
-* empezar `docs/40_results.md`
+* `docs/40_results.md`
 
 ### Contribución al paper
 
-Primera sección de resultados.
+Primera sección de resultados. AUROC revela que RF discrimina mejor que LR (0.77 vs 0.71 en test), aunque ambos son insuficientes para uso clínico.
 
 ---
 
+[AQUÍ ESTAMOS]
 ## Sprint 1F — Labeling/Threshold Experiments
 
 ### Objetivo

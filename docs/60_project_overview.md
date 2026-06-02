@@ -91,23 +91,39 @@ The project follows a structured and iterative development strategy:
 * Segmentation into fixed-length temporal windows
 * Label assignment based on overlap with seizure intervals
 
-### Phase 2 — Feature Engineering (ongoing)
+### Phase 2 — Feature Engineering
 
 * Time-domain features (mean, standard deviation, RMS, line length)
-* Frequency-domain features (bandpower across EEG bands)
+* Frequency-domain features (bandpower across delta, theta, alpha, beta bands)
+* 144 features per segment (8 features × 18 channels)
+* Positional channel indexing to guarantee fixed feature schema
 
-### Phase 3 — Baseline Modeling
+### Phase 3 — Patient-Independent Evaluation
 
-* Logistic Regression
-* Random Forest
-* Patient-independent evaluation
+* Subject-level train/val/test split (60/20/20 target on positive segments)
+* Greedy stratified assignment algorithm (deterministic, no random seed)
+* Zero patient overlap between splits — critical for clinical credibility
 
-### Phase 4 — Advanced Modeling (future work)
+### Phase 4 — Baseline Modeling
 
-* Deep learning models (CNNs for EEG)
-* Temporal models (Transformers, sequence models)
-* Uncertainty estimation and calibration
-* Explainability methods
+* Logistic Regression and Random Forest with balanced class weights
+* Generic training pipeline with seed control and artifact serialization
+* Prediction files saved per split for decoupled evaluation
+
+### Phase 5 — Clinical Evaluation
+
+* 19 clinical metrics (sensitivity, specificity, F2, AUROC, AUPRC, etc.)
+* Publication-quality plots (ROC, PR, confusion matrices, threshold analysis)
+* Key finding: both models beat random but are insufficient for clinical use
+* Performance floor established for all future models
+
+### Phase 6 — Advanced Modeling (future work)
+
+* Deep learning models (1D CNNs on raw EEG signal)
+* Sequence models (LSTM/GRU) for temporal context
+* Transformer-based approaches for temporal modeling
+* Uncertainty estimation and probability calibration
+* Explainability methods (feature importance, saliency maps, attention)
 
 ---
 
@@ -165,11 +181,14 @@ These challenges guide the design of the preprocessing and labeling strategies.
 
 ## 9. Current Status
 
-At the current stage:
+At the current stage (Sprint 1E complete):
 
-* A fully reproducible dataset preparation pipeline has been implemented
-* EEG recordings have been segmented and labeled (~707k segments)
-* Data integrity and consistency have been validated through systematic checks
+* End-to-end pipeline operational: raw EEG → segments → features → split → training → evaluation
+* 707,524 labeled segments with 144 features each
+* Patient-independent split ensuring zero data leakage
+* Two baseline models trained and clinically evaluated
+* 93 automated tests covering all pipeline components
+* Key result: LR achieves AUROC 0.66, RF achieves AUROC 0.71 on unseen patients — both above random but insufficient for clinical use, establishing the performance floor for future models
 
 ---
 

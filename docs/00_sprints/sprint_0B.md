@@ -1,5 +1,11 @@
 # Sprint 0B — Data Ingestion & Validation (EEG)
 
+## Status
+
+Completed
+
+---
+
 ## 1. Objective
 
 The goal of this sprint is to acquire, validate, and inspect the EEG dataset in BIDS format.
