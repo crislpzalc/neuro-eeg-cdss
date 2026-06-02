@@ -116,6 +116,9 @@ The project follows a structured and iterative development strategy:
 * Publication-quality plots (ROC, PR, confusion matrices, threshold analysis)
 * Key finding: both models beat random but are insufficient for clinical use
 * Performance floor established for all future models
+* Labeling strategy experiments (6 configurations) demonstrate that the overlap
+  threshold has negligible impact with 5-second windows, validating the default
+  policy and confirming the bottleneck is feature representation
 
 ### Phase 6 — Advanced Modeling (future work)
 
@@ -181,13 +184,14 @@ These challenges guide the design of the preprocessing and labeling strategies.
 
 ## 9. Current Status
 
-At the current stage (Sprint 1E complete):
+At the current stage (Sprint 1F complete):
 
 * End-to-end pipeline operational: raw EEG → segments → features → split → training → evaluation
 * 707,524 labeled segments with 144 features each
 * Patient-independent split ensuring zero data leakage
 * Two baseline models trained and clinically evaluated
-* 93 automated tests covering all pipeline components
+* Systematic labeling strategy experiments (6 configurations) validating default policy
+* 121 automated tests covering all pipeline components
 * Key result: LR achieves AUROC 0.66, RF achieves AUROC 0.71 on unseen patients — both above random but insufficient for clinical use, establishing the performance floor for future models
 
 ---

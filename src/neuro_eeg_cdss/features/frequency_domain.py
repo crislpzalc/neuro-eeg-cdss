@@ -1,8 +1,3 @@
-from __future__ import annotations
-import numpy as np
-from scipy.integrate import trapezoid
-from scipy.signal import welch
-
 """
 Frequency-domain EEG feature extraction utilities.
 
@@ -17,6 +12,12 @@ Design goals
 - Keep feature definitions aligned with standard EEG frequency bands
 - Return numerically stable outputs for downstream tabular pipelines
 """
+
+from __future__ import annotations
+
+import numpy as np
+from scipy.integrate import trapezoid
+from scipy.signal import welch
 
 
 class FrequencyFeatureError(ValueError):

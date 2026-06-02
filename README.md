@@ -102,7 +102,7 @@ python scripts/data_index/build_manifest.py
 #### Sprint 1E — Clinical Evaluation
 - 19 clinical metrics including sensitivity, specificity, F2, AUROC, AUPRC
 - Publication-quality plots: ROC curves, PR curves, confusion matrices, threshold analysis
-- Model comparison: RF discriminates better (AUROC 0.77 vs 0.71) but both insufficient for clinical use
+- Model comparison: RF discriminates better (AUROC 0.71 vs 0.66) but both insufficient for clinical use
 - Reusable evaluation framework for all future models
 
 #### Sprint 1F — Labeling Strategy Experiments

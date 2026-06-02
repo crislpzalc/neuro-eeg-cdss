@@ -1,6 +1,3 @@
-from __future__ import annotations
-import numpy as np
-
 """
 Time-domain EEG feature extraction utilities.
 
@@ -15,6 +12,10 @@ Design goals
 - Provide numerically stable and easily interpretable features
 - Keep implementations simple and reproducible for baseline experiments
 """
+
+from __future__ import annotations
+
+import numpy as np
 
 
 class FeatureComputationError(ValueError):

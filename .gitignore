@@ -25,6 +25,10 @@ Thumbs.db
 *.pth
 *.onnx
 *.ckpt
+*.pkl
+
+# Data artifacts
+*.parquet
 
 # Distribution / packaging
 .Python

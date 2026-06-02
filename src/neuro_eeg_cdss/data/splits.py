@@ -201,10 +201,7 @@ def _greedy_stratified_assignment(
 
         for split_name in priority:
             target = targets[split_name]
-            if target > 0:
-                deficit = (target - current[split_name]) / target
-            else:
-                deficit = 0.0
+            deficit = (target - current[split_name]) / target if target > 0 else 0.0
 
             if deficit > best_deficit:
                 best_deficit = deficit

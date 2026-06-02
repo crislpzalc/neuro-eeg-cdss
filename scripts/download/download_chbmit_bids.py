@@ -8,7 +8,6 @@ import sys
 import zipfile
 from pathlib import Path
 
-
 RECORD_ID = "10259996"
 DOI = "10.5281/zenodo.10259996"
 FILENAME = "BIDS_CHB-MIT.zip"
@@ -169,7 +168,7 @@ if __name__ == "__main__":
         raise SystemExit(main())
     except KeyboardInterrupt:
         print("\n[ERROR] Interrupted by user.")
-        raise SystemExit(130)
+        raise SystemExit(130) from None
     except Exception as exc:
         print(f"\n[ERROR] {exc}")
-        raise SystemExit(1)
+        raise SystemExit(1) from exc

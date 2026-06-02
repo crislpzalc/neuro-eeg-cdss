@@ -1,6 +1,5 @@
-import pytest
-
 import pandas as pd
+import pytest
 
 from neuro_eeg_cdss.data.splits import (
     SplitAssignment,

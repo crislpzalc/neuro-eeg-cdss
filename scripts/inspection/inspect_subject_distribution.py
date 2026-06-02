@@ -324,13 +324,15 @@ def recommend_strategy(
     if positive_subjects < 4:
         return (
             "Very few positive subjects: do not use a purely random subject split. "
-            "Assign positive subjects in a controlled way to guarantee positives in validation and test."
+            "Assign positive subjects in a controlled way to guarantee positives in "
+            "validation and test."
         )
 
     if concentration["top_3_positive_share"] >= 0.75:
         return (
             "Positives are highly concentrated in a few subjects: use a subject-level "
-            "hold-out split with controlled assignment of positive subjects before filling with negatives."
+            "hold-out split with controlled assignment of positive subjects "
+            "before filling with negatives."
         )
 
     if concentration["top_3_segment_share"] >= 0.50:

@@ -13,7 +13,6 @@ from neuro_eeg_cdss.evaluation.metrics import (
     format_metrics_report,
 )
 
-
 # ── Fixtures ─────────────────────────────────────────────────────────
 
 

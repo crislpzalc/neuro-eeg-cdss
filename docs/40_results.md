@@ -15,20 +15,20 @@ This document collects evaluation results across all sprints and model types.
 | Precision | 0.0178 | 0.0000 |
 | NPV | 0.9954 | 0.9945 |
 | F1 | 0.0331 | 0.0000 |
-| F2 | 0.0882 | 0.0000 |
+| F2 | 0.0682 | 0.0000 |
 | Balanced Accuracy | 0.5808 | 0.4999 |
-| **AUROC** | **0.7060** | **0.7709** |
-| **AUPRC** | **0.0194** | **0.0510** |
+| **AUROC** | **0.6622** | **0.7104** |
+| **AUPRC** | **0.0123** | **0.0572** |
 
 ### 1.2 Key Observations
 
-1. **AUROC vs Recall paradox.** RF has higher AUROC (0.77) than LR (0.71) but 0% recall at threshold 0.5. This means RF ranks seizures higher than non-seizures, but its probability estimates are uncalibrated — the model "knows" something but can't express it as usable probabilities.
+1. **AUROC vs Recall paradox.** RF has higher AUROC (0.71) than LR (0.66) but 0% recall at threshold 0.5. This means RF ranks seizures higher than non-seizures, but its probability estimates are uncalibrated — the model "knows" something but can't express it as usable probabilities.
 
-2. **AUPRC is the honest metric.** Both AUPRC values are extremely low (0.019 and 0.051). This reflects the fundamental challenge: with 0.55% prevalence in the test set, achieving high precision is nearly impossible for these models.
+2. **AUPRC is the honest metric.** Both AUPRC values are extremely low (0.012 and 0.057). This reflects the fundamental challenge: with 0.55% prevalence in the test set, achieving high precision is nearly impossible for these models.
 
 3. **Both models beat random.** Random AUROC = 0.5, random AUPRC = prevalence (~0.0055). Both models significantly exceed these baselines, confirming they learn genuine signal.
 
-4. **Performance floor established.** Future models must exceed: AUROC > 0.77, AUPRC > 0.051 (RF benchmarks) to demonstrate progress.
+4. **Performance floor established.** Future models must exceed: AUROC > 0.71, AUPRC > 0.057 (RF benchmarks) to demonstrate progress.
 
 ### 1.3 Threshold Analysis Summary (Test Set, LR)
 
@@ -44,16 +44,6 @@ Lowering the threshold significantly increases sensitivity but at the cost of sp
 - Probability calibration (Sprint 2C)
 - Temporal post-processing to reduce false alarms (Sprint 2A)
 - Threshold optimization as part of the inference pipeline
-
----
-
-## 2. Evaluation Artifacts
-
-All evaluation outputs are saved to `experiments/baseline/evaluation/`:
-
-* `all_metrics.json` — complete metrics for both models on all splits
-* Per-model: `metrics.json`, `threshold_analysis_*.json`
-* Plots: ROC curves, PR curves, confusion matrices (absolute + normalized), threshold analysis, model comparison bar charts
 
 ---
 

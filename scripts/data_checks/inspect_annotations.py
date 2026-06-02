@@ -2,7 +2,6 @@ from pathlib import Path
 
 from mne_bids import BIDSPath, read_raw_bids
 
-
 DATASET_ROOT = Path("data/raw/chbmit_bids")
 
 
