@@ -246,46 +246,38 @@ Primera sección de resultados. AUROC revela que RF discrimina mejor que LR (0.7
 
 ---
 
-[AQUÍ ESTAMOS]
 ## Sprint 1F — Labeling/Threshold Experiments
+
+**Estado:** hecho
 
 ### Objetivo
 
-Iniciar la línea experimental más paper-worthy.
+Comparar sistemáticamente estrategias de etiquetado.
 
 ### Entregables
 
-* comparación sistemática de estrategias de etiquetado
+* `src/neuro_eeg_cdss/experiments/labeling.py` — módulo experimental
+* `scripts/experiments/run_labeling_experiments.py` — script orquestador
+* `tests/test_labeling_experiment.py` — 28 tests
+* Resultados de 6 configuraciones (3 thresholds × 2 drop policies)
 
-### Tareas
+### Resultado principal
 
-1. Repetir dataset generation con distintos thresholds:
-
-   * 0.3
-   * 0.5
-   * 0.7
-2. Comparar:
-
-   * positivos generados
-   * recall
-   * specificity
-   * F1
-   * AUROC
-3. Comparar también:
-
-   * drop ambiguous
-   * keep ambiguous as negative
-4. Analizar impacto en falsos positivos/negativos
+La estrategia de etiquetado tiene **impacto negligible** con ventanas de 5s: solo 156 de 707,524 ventanas tienen overlap parcial. Threshold 0.3, 0.5 producen resultados idénticos. Threshold 0.7 cambia la sensibilidad en < 0.003.
 
 ### Documentación
 
 * `docs/00_sprints/sprint_1F.md`
-* actualizar `docs/40_results.md`
-* actualizar `docs/50_decisions.md`
+* `docs/40_results.md` (actualizado)
+* `docs/50_decisions.md` (D8 añadida)
 
 ### Contribución al paper
 
-Este sprint puede convertirse en el núcleo experimental del paper.
+Evidencia de que el bottleneck es la representación de features, no la política de etiquetado. Resultado negativo pero publicable y metodológicamente riguroso.
+
+---
+
+[AQUÍ ESTAMOS]
 
 ---
 

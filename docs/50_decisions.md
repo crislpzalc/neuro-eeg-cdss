@@ -91,3 +91,19 @@ This document tracks important methodological and architectural decisions made d
 **Trade-off:** F2 can appear to reward models that generate many false alarms. In a real system, false alarm rate must still be controlled — but through post-processing (Sprint 2A) and event-level evaluation (Sprint 2B), not by penalizing the detection model.
 
 ---
+
+## D8. Labeling strategy has negligible impact with 5s windows
+
+**Sprint:** 1F
+
+**Decision:** The default labeling policy (threshold=0.5, drop_partial=True) is retained. The systematic comparison of 6 configurations shows no meaningful performance difference.
+
+**Rationale:** With 5-second non-overlapping windows, only 156 out of 707,524 windows (0.022%) have partial seizure overlap. The remaining 99.98% are unambiguously positive (full overlap) or negative (zero overlap). Changing the threshold or drop policy affects at most 74 windows, producing < 0.003 sensitivity difference.
+
+**Evidence:** Configs with threshold 0.3 and 0.5 produced identical results. Threshold 0.7 changed sensitivity from 0.2314 to 0.2289 — a negligible difference.
+
+**Implication:** The performance bottleneck lies in feature representation and model architecture, not in the labeling strategy. This validates the progression toward deep learning models (Block 3) that learn directly from raw signal.
+
+**When to revisit:** If window size is reduced (e.g., 1–2 seconds) or overlapping windows are introduced, more boundaries would fall within windows, increasing the impact of the labeling policy.
+
+---

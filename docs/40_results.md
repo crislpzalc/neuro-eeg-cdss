@@ -57,10 +57,70 @@ All evaluation outputs are saved to `experiments/baseline/evaluation/`:
 
 ---
 
-## 3. Future Results
+## 2. Labeling Strategy Experiments (Sprint 1F)
+
+### 2.1 Experiment Design
+
+Six configurations testing 3 overlap thresholds (0.3, 0.5, 0.7) crossed
+with 2 partial-overlap policies (drop ambiguous, keep as negative).
+Only Logistic Regression was used (RF excluded due to catastrophic
+overfitting in Sprint 1E).
+
+### 2.2 Test Set Performance
+
+| Config          | Threshold | Drop | N+    | Sensitivity | Specificity | F2     | AUROC  | AUPRC  |
+|-----------------|-----------|------|-------|-------------|-------------|--------|--------|--------|
+| thresh_0.3_drop | 0.3       | Yes  | 2,321 | 0.2314      | 0.9289      | 0.0682 | 0.6623 | 0.0123 |
+| thresh_0.3_keep | 0.3       | No   | 2,321 | 0.2314      | 0.9289      | 0.0682 | 0.6623 | 0.0123 |
+| thresh_0.5_drop | 0.5       | Yes  | 2,321 | 0.2314      | 0.9289      | 0.0682 | 0.6623 | 0.0123 |
+| thresh_0.5_keep | 0.5       | No   | 2,321 | 0.2314      | 0.9289      | 0.0682 | 0.6623 | 0.0123 |
+| thresh_0.7_drop | 0.7       | Yes  | 2,247 | 0.2289      | 0.9310      | 0.0666 | 0.6549 | 0.0114 |
+| thresh_0.7_keep | 0.7       | No   | 2,247 | 0.2289      | 0.9311      | 0.0667 | 0.6553 | 0.0115 |
+
+### 2.3 Key Findings
+
+1. **Configs 1–4 are identical.** Thresholds 0.3 and 0.5 produce the
+   exact same dataset because no windows with 0 < overlap < 0.5 exist
+   (they were dropped during the original build).
+
+2. **Threshold 0.7 has negligible impact.** Only 74 windows (0.01% of
+   the dataset) change status, causing < 0.003 difference in sensitivity.
+
+3. **The labeling strategy is NOT the bottleneck.** With 5-second
+   non-overlapping windows, seizure boundaries create only 156 partial-
+   overlap windows out of 707,524 total (0.022%). The choice of threshold
+   and drop policy has minimal impact on model performance.
+
+4. **The original default (threshold=0.5, drop=True) is validated** as a
+   reasonable choice for this dataset and window configuration.
+
+### 2.4 Implication
+
+The performance bottleneck lies in feature representation and model
+architecture, not in the labeling strategy. This motivates progression
+to deep learning approaches that learn directly from raw signal.
+
+---
+
+## 3. Evaluation Artifacts
+
+All evaluation outputs are saved to `experiments/baseline/evaluation/`:
+
+* `all_metrics.json` — complete metrics for both models on all splits
+* Per-model: `metrics.json`, `threshold_analysis_*.json`
+* Plots: ROC curves, PR curves, confusion matrices (absolute + normalized), threshold analysis, model comparison bar charts
+
+Labeling experiment outputs are saved to `experiments/labeling/`:
+
+* `all_results.json` — combined results for all 6 configurations
+* Per-config directories with `results.json`
+* `comparison_val.txt`, `comparison_test.txt` — formatted comparison tables
+
+---
+
+## 4. Future Results
 
 This section will be expanded with:
 
-* Sprint 1F: labeling strategy comparison
 * Sprint 2B: event-level metrics (detection delay, false alarms per hour)
 * Sprint 3E: classical vs deep learning comparison

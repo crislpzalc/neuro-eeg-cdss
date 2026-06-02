@@ -105,10 +105,15 @@ python scripts/data_index/build_manifest.py
 - Model comparison: RF discriminates better (AUROC 0.77 vs 0.71) but both insufficient for clinical use
 - Reusable evaluation framework for all future models
 
+#### Sprint 1F — Labeling Strategy Experiments
+- Systematic comparison of 6 labeling configurations (3 thresholds × 2 drop policies)
+- Finding: labeling threshold has negligible impact with 5s windows (only 0.022% of windows have partial overlap)
+- Validates default policy and establishes that the bottleneck is feature representation, not labeling
+
 ---
 
 ### Next Steps
 
-- Labeling threshold experiments (impact of labeling strategy on detection)
 - Temporal post-processing (smoothing, majority voting)
+- Event-level evaluation (detection delay, false alarms per hour)
 - Deep learning models (CNN, LSTM, Transformer)
