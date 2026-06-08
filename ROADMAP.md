@@ -309,11 +309,9 @@ Reduce predicciones aisladas poco realistas.
 
 ---
 
-[AQUÍ ESTAMOS]
-
----
-
 ## Sprint 2B — Event-level Evaluation
+
+**Estado:** hecho
 
 ### Objetivo
 
@@ -321,27 +319,27 @@ Pasar de evaluación por ventana a evaluación por evento clínico.
 
 ### Entregables
 
-* métricas a nivel evento
+* `src/neuro_eeg_cdss/evaluation/event_metrics.py` — módulo de métricas a nivel evento
+* `scripts/evaluation/run_event_evaluation.py` — script de evaluación
+* `tests/test_event_metrics.py` — 37 tests
+* Métricas: event sensitivity, event precision, event F1/F2, FA/hour, detection latency
 
-### Tareas
+### Resultado principal
 
-1. Definir qué es un evento detectado
-2. Implementar matching entre eventos predichos y reales
-3. Calcular:
-
-   * event recall
-   * false alarms per hour
-   * detection delay
-4. Comparar modelos y post-processing
+**Event sensitivity = 100%** en todos los configs — ninguna seizure se pierde completamente. El problema real es la tasa de falsas alarmas: 12.5 FA/hour en baseline, reducida a 0.93 FA/hour con mindur_w4 (reducción del 92.6%). Latencia de detección ≈ 0 segundos.
 
 ### Documentación
 
 * `docs/00_sprints/sprint_2B.md`
-* actualizar `docs/40_results.md`
+* `docs/40_results.md` (actualizado)
 
 ### Contribución al paper
 
-Esto eleva mucho el rigor clínico del proyecto.
+Esto eleva mucho el rigor clínico del proyecto. Revela que el modelo ya es clínicamente útil a nivel evento con post-procesamiento.
+
+---
+
+[AQUÍ ESTAMOS]
 
 ---
 

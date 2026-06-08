@@ -184,16 +184,17 @@ These challenges guide the design of the preprocessing and labeling strategies.
 
 ## 9. Current Status
 
-At the current stage (Sprint 2A complete):
+At the current stage (Sprint 2B complete):
 
-* End-to-end pipeline operational: raw EEG → segments → features → split → training → evaluation → post-processing
+* End-to-end pipeline operational: raw EEG → segments → features → split → training → evaluation → post-processing → event-level evaluation
 * 707,524 labeled segments with 144 features each
 * Patient-independent split ensuring zero data leakage
 * Two baseline models trained and clinically evaluated
 * Systematic labeling strategy experiments (6 configurations) validating default policy
-* Temporal post-processing with 3 strategies (median filter, moving average, minimum duration) improving F2 by up to 13%
-* 173 automated tests covering all pipeline components
-* Key result: LR achieves AUROC 0.66, RF achieves AUROC 0.71 on unseen patients — both above random but insufficient for clinical use, establishing the performance floor for future models
+* Temporal post-processing with 3 strategies improving window-level F2 by up to 13%
+* Event-level evaluation revealing 100% seizure detection rate with < 1 false alarm/hour after post-processing
+* 210 automated tests covering all pipeline components
+* Key result: LR detects 100% of seizures at the event level; the bottleneck is false alarm rate (12.5/hour baseline, 0.93/hour after post-processing), not missed seizures
 
 ---
 
