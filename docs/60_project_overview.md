@@ -184,16 +184,17 @@ These challenges guide the design of the preprocessing and labeling strategies.
 
 ## 9. Current Status
 
-At the current stage (Sprint 2B complete):
+At the current stage (Sprint 2C complete):
 
-* End-to-end pipeline operational: raw EEG → segments → features → split → training → evaluation → post-processing → event-level evaluation
+* End-to-end pipeline operational: raw EEG → segments → features → split → training → evaluation → post-processing → event-level evaluation → calibration
 * 707,524 labeled segments with 144 features each
 * Patient-independent split ensuring zero data leakage
 * Two baseline models trained and clinically evaluated
 * Systematic labeling strategy experiments (6 configurations) validating default policy
 * Temporal post-processing with 3 strategies improving window-level F2 by up to 13%
 * Event-level evaluation revealing 100% seizure detection rate with < 1 false alarm/hour after post-processing
-* 210 automated tests covering all pipeline components
+* Probability calibration with Platt scaling and isotonic regression, reliability diagrams, and calibration metrics (ECE, Brier score)
+* 260 automated tests covering all pipeline components
 * Key result: LR detects 100% of seizures at the event level; the bottleneck is false alarm rate (12.5/hour baseline, 0.93/hour after post-processing), not missed seizures
 
 ---

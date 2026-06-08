@@ -339,11 +339,9 @@ Esto eleva mucho el rigor clínico del proyecto. Revela que el modelo ya es clí
 
 ---
 
-[AQUÍ ESTAMOS]
-
----
-
 ## Sprint 2C — Probability Calibration
+
+**Estado:** hecho
 
 ### Objetivo
 
@@ -351,30 +349,30 @@ Hacer que las probabilidades sean interpretables.
 
 ### Entregables
 
-* calibration module
-* reliability diagrams
+* `src/neuro_eeg_cdss/calibration/calibrator.py` — módulo de calibración (Platt + isotonic)
+* `src/neuro_eeg_cdss/calibration/plots.py` — reliability diagrams y comparación plots
+* `scripts/calibration/run_calibration.py` — script de experimentos
+* `tests/test_calibration.py` — 48 tests
+* Métricas: ECE, MCE, Brier score, log loss
+* Reliability diagrams antes/después de calibración
 
-### Tareas
+### Resultado principal
 
-1. Medir calibración inicial
-2. Implementar:
-
-   * Platt scaling o temperature scaling
-3. Generar:
-
-   * reliability diagrams
-   * calibration metrics
-4. Comparar calibrated vs uncalibrated
+La calibración corrige la escala de probabilidades sin cambiar el AUROC (discriminación). Platt scaling e isotonic regression reducen el ECE. Random Forest se beneficia especialmente de la calibración ya que sus probabilidades están comprimidas cerca de cero.
 
 ### Documentación
 
 * `docs/00_sprints/sprint_2C.md`
-* actualizar `docs/30_modeling.md`
-* actualizar `docs/40_results.md`
+* `docs/40_results.md` (actualizado)
+* `docs/60_project_overview.md` (actualizado)
 
 ### Contribución al sistema real
 
-Necesario si luego quieres decisiones basadas en confianza.
+Necesario para decisiones basadas en confianza y thresholds interpretables.
+
+---
+
+[AQUÍ ESTAMOS]
 
 ---
 

@@ -187,7 +187,58 @@ false alarms" — a fundamentally different engineering problem.
 
 ---
 
-## 6. Evaluation Artifacts
+## 6. Probability Calibration (Sprint 2C)
+
+### 6.1 Objective
+
+Make model probabilities interpretable: when the model says "0.3", it
+should mean ~30% of those cases are actual seizures.
+
+### 6.2 Calibration Methods
+
+Two methods fitted on validation set predictions, evaluated on test set:
+
+- **Platt scaling**: Logistic regression on uncalibrated probabilities (2 parameters)
+- **Isotonic regression**: Non-parametric monotone fit (flexible)
+
+### 6.3 Key Metrics
+
+Calibration quality is measured by:
+
+- **ECE** (Expected Calibration Error): weighted average per-bin |predicted - observed|
+- **MCE** (Maximum Calibration Error): worst-case bin error
+- **Brier score**: mean((probability - truth)²)
+- **Log loss**: cross-entropy loss
+
+### 6.4 Key Findings
+
+1. **Calibration reveals the probability distribution problem.** Most
+   uncalibrated probabilities cluster near 0 (for both models), meaning
+   the models are very conservative — they rarely express high confidence
+   for seizure.
+
+2. **Platt scaling and isotonic regression both correct the probability
+   scale**, reducing ECE and making probabilities more interpretable.
+
+3. **Calibration does not change discrimination** (AUROC). It only
+   changes the probability scale, not the ranking of samples. This is
+   by design.
+
+4. **Random Forest benefits most from calibration.** Its probabilities
+   are heavily compressed near zero (explaining the 0% recall at
+   threshold 0.5). Calibration can "stretch" these probabilities to
+   make them usable.
+
+### 6.5 Implication
+
+With calibrated probabilities, threshold selection becomes principled:
+a threshold of 0.3 genuinely means "flag anything with ≥30% estimated
+seizure probability." This enables confidence-based decision policies
+(Sprint 4B) and meaningful uncertainty communication.
+
+---
+
+## 7. Evaluation Artifacts
 
 All evaluation outputs are saved to `experiments/baseline/evaluation/`:
 
@@ -212,6 +263,13 @@ Event-level evaluation outputs are saved to `experiments/event_evaluation/`:
 * `all_event_results.json` — combined event metrics for all configs
 * `event_metrics_val.json`, `event_metrics_test.json` — per-split results
 * Per-recording breakdown with false alarm analysis
+
+Calibration outputs are saved to `experiments/calibration/`:
+
+* `all_results.json` — combined calibration results for all models and methods
+* Per-model directories with `results.json`, reliability diagrams, comparison plots
+* Calibrated prediction parquets per method
+* `comparison_test.txt` — formatted comparison table
 
 ---
 
