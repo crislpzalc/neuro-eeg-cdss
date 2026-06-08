@@ -277,13 +277,11 @@ Evidencia de que el bottleneck es la representación de features, no la polític
 
 ---
 
-[AQUÍ ESTAMOS]
-
----
-
 # BLOQUE 2 — Del baseline a un sistema clínicamente más real
 
 ## Sprint 2A — Temporal Post-processing
+
+**Estado:** hecho
 
 ### Objetivo
 
@@ -291,26 +289,27 @@ Mejorar la coherencia temporal de las predicciones.
 
 ### Entregables
 
-* módulo de smoothing/post-processing
+* `src/neuro_eeg_cdss/postprocessing/temporal.py` — módulo de post-procesamiento temporal
+* `scripts/postprocessing/run_temporal_postprocessing.py` — script de experimentos
+* `tests/test_temporal_postprocessing.py` — 52 tests
+* 8 configuraciones evaluadas (3 median filters, 2 moving averages, 3 min duration filters)
 
-### Tareas
+### Resultado principal
 
-1. Diseñar reglas temporales:
-
-   * majority voting en ventanas consecutivas
-   * smoothing
-   * mínimo número de ventanas para declarar evento
-2. Implementar módulo reusable
-3. Comparar antes y después
+Todas las estrategias mejoran F2 sobre el baseline. El mejor resultado es mindur_w4 con F2=0.0771 (+13.0% sobre baseline de 0.0682). La especificidad mejora hasta +4.6% con min_duration. El bottleneck sigue siendo la representación de features, no el refinamiento de predicciones.
 
 ### Documentación
 
 * `docs/00_sprints/sprint_2A.md`
-* actualizar `docs/20_pipeline.md`
+* `docs/40_results.md` (actualizado)
 
 ### Contribución al sistema real
 
 Reduce predicciones aisladas poco realistas.
+
+---
+
+[AQUÍ ESTAMOS]
 
 ---
 

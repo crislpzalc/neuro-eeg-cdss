@@ -108,7 +108,72 @@ Labeling experiment outputs are saved to `experiments/labeling/`:
 
 ---
 
-## 4. Future Results
+## 4. Temporal Post-Processing (Sprint 2A)
+
+### 4.1 Experiment Design
+
+Eight configurations testing 3 strategies: median filter (kernel 3/5/7),
+moving average (kernel 3/5), and minimum duration filter (2/3/4 windows).
+Applied to Logistic Regression predictions on temporally ordered windows
+within each recording.
+
+### 4.2 Test Set Performance
+
+| Config | Sensitivity | Specificity | F2 | Changed |
+|--------|-------------|-------------|------|---------|
+| **Baseline** | **0.2335** | **0.9281** | **0.0682** | — |
+| median_k3 | 0.2166 | 0.9426 | 0.0746 | 2,679 |
+| median_k5 | 0.1996 | 0.9504 | 0.0762 | 3,694 |
+| median_k7 | 0.1890 | 0.9549 | 0.0770 | 4,078 |
+| mavg_k3 | 0.2166 | 0.9444 | 0.0764 | 3,265 |
+| mavg_k5 | 0.1890 | 0.9501 | 0.0720 | 3,983 |
+| mindur_w2 | 0.1890 | 0.9511 | 0.0729 | 1,958 |
+| mindur_w3 | 0.1550 | 0.9657 | 0.0752 | 3,212 |
+| mindur_w4 | 0.1359 | 0.9739 | 0.0771 | 3,911 |
+
+### 4.3 Key Findings
+
+1. **All strategies improve F2** over baseline. Best: mindur_w4 (+13.0%).
+2. **Consistent sensitivity-specificity trade-off**: sensitivity decreases,
+   specificity increases, net F2 improves because false positives
+   outnumber true positives by a large margin.
+3. **Minimum duration is most effective** for specificity gains (+4.6%)
+   with the clearest clinical interpretation.
+4. **Median filter provides best balance** — comparable F2 to min duration
+   while operating on probabilities rather than hard decisions.
+
+### 4.4 Implication
+
+Temporal post-processing is a low-cost technique that improves clinical
+utility without retraining. However, the F2 improvements (0.068 → 0.077)
+are modest, reinforcing that the core bottleneck remains feature
+representation, not prediction refinement.
+
+---
+
+## 5. Evaluation Artifacts
+
+All evaluation outputs are saved to `experiments/baseline/evaluation/`:
+
+* `all_metrics.json` — complete metrics for both models on all splits
+* Per-model: `metrics.json`, `threshold_analysis_*.json`
+* Plots: ROC curves, PR curves, confusion matrices (absolute + normalized), threshold analysis, model comparison bar charts
+
+Labeling experiment outputs are saved to `experiments/labeling/`:
+
+* `all_results.json` — combined results for all 6 configurations
+* Per-config directories with `results.json`
+* `comparison_val.txt`, `comparison_test.txt` — formatted comparison tables
+
+Post-processing outputs are saved to `experiments/postprocessing/`:
+
+* `all_results.json` — combined results for all 8 configurations
+* Per-config directories with `results_val.json`, `results_test.json`
+* `comparison_val.txt`, `comparison_test.txt` — formatted comparison tables
+
+---
+
+## 6. Future Results
 
 This section will be expanded with:
 
